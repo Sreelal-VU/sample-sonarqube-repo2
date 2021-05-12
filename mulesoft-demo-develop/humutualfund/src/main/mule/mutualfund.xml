@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="facfcf02-5db7-4afd-8e36-0cebe3b82105" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="MutualFund" doc:id="f1cc4128-c8c0-40d9-b32d-1ea77a996e84" >
+		<http:listener doc:name="GET /mf" doc:id="a88a1f57-fa40-48cc-bc95-410552558adc" config-ref="HTTP_Listener_config" path="/mf" allowedMethods="GET"/>
+		<set-payload value="MutualFund" doc:name="MutualFund" doc:id="14ebcb58-c3af-47a3-998c-ba98239cc858" />
+	</flow>
+	<flow name="HelloWorld" doc:id="e88344d1-b377-4a20-85e9-696f9092ee13" >
+		<http:listener doc:name="GET /hello" doc:id="9d67594c-61fc-4e9d-a77d-599ece9247f2" config-ref="HTTP_Listener_config" path="/hello" allowedMethods="GET"/>
+		<set-payload value="Hello World" doc:name="HelloWorld" doc:id="918abc5b-9fbc-4d75-acf4-8cb5aa535f42" />
+	</flow>
+</mule>
