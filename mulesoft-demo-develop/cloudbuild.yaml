@@ -1,16 +1,8 @@
-#static code analysis by sonarqube
-- name: 'maven:3.6.1-jdk-8'
-  entrypoint: 'bash'
-  args:
-    - -c
-    - |
-      unset MAVEN_CONFIG \
-      && echo "104.199.71.165 sonarqube.ct.blue.cdtapps.com" > /etc/hosts \
-      && mvn sonar:sonar -q -Dsonar.login=5531b1a2d571c0482a3d89f605830e08ccf5f850 \
-      '-Dsonar.projectKey=odp.df.pubsub-sftp' \
-      '-Dsonar.projectName=ODP-DF-PUBSUB-SFTP' \
-      '-Dsonar.host.url=https://sonarqube.ct.blue.cdtapps.com' \
-      '-Dsonar.qualitygate.wait=true' \
-      'allow_failure: true'
-  dir: 'dataflows/generic/pubsub-sftp/src'
-  id: 'sonarqube-analysis'
+#static code analysis by sonarqube  
+  steps:
+  - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+    args:
+    - '-Dsonar.host.url=http://35.190.148.217:9000'
+    - '-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36'
+    - '-Dsonar.projectKey=sample-project1'
+tags: ['cloud-builders-community']
