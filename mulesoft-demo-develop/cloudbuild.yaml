@@ -1,8 +1,13 @@
 #static code analysis by sonarqube  
-  steps:
+/opt/sonar-scanner/bin/sonar-scanner \
+
+-id: 'Sonarqube'
   - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
     args:
-    - '-Dsonar.host.url=http://35.190.148.217:9000'
-    - '-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36'
+    - '-Dsonar.host.url=http://35.190.148.217:9000' \
+    - '-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36' \
     - '-Dsonar.projectKey=sample-project1'
+    - '-Dsonar.qualitygate.wait=true'
+    - '-Dsonar.sources=.'/target''
 tags: ['cloud-builders-community']
+
