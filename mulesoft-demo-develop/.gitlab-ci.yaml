@@ -1,0 +1,30 @@
+image: maven:3.6.1-jdk-8
+
+variables :
+  MULE_RUNTIME_VERSION: 4.3.0
+  CH_WORKER_TYPE: SMALL
+  CH_WORKER_NUMBER: 1
+
+stages :
+  - build
+  - deploy
+
+build:
+  stage : build
+  script:
+  - cd humutualfund
+  - mvn -s ../settings.xml clean package
+
+
+  artifacts:
+    paths:
+    - humutualfund/target/
+    when: always
+    expire_in: 2 hour
+    
+deploy:
+  stage: deploy
+  script:
+    - mvn -s settings.xml -f humutualfund/pom.xml mule:deploy -Dmule.artifact=humutualfund/target/helloworld-1.0.0-SNAPSHOT-mule-application.jar  -Danypoint.userName=$MULESOFTUSERNAME -Danypoint.password=$MULESOFTPASSWORD -Dapplication.name=demo-123-mproject -Danypoint.businessGroup=Sandbox -Danypoint.environment=Sandbox -Dch.workers=$CH_WORKER_TYPE -Dch.region=us-east-2 -Dch.workers=$CH_WORKER_NUMBER -Denv=dev -Denv.clientId=$MULESOFTCLIENTID -Denv.clientSecret=$MULESOFTCLIENTSECRET
+  dependencies:
+    - build
