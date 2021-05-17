@@ -1,13 +1,50 @@
-#static code analysis by sonarqube  
-/opt/sonar-scanner/bin/sonar-scanner \
+image: maven:3.6.1-jdk-8
 
--id: 'Sonarqube'
-  - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-    args:
-    - '-Dsonar.host.url=http://35.190.148.217:9000' \
-    - '-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36' \
-    - '-Dsonar.projectKey=sample-project1'
-    - '-Dsonar.qualitygate.wait=true'
-    - '-Dsonar.sources=.'humutualfund/target/''
-tags: ['cloud-builders-community']
+variables :
+  MULE_RUNTIME_VERSION: 4.3.0
+  CH_WORKER_TYPE: SMALL
+  CH_WORKER_NUMBER: 1
+
+stages :
+  - build
+  - deploy
+  steps: 
+  - name: "gcr.io/sample-sonarqube-repo2/sonar-scanner:latest"
+    args: 
+      - "-Dsonar.host.url=http://35.190.148.217:9000"
+      - "-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36"
+      - "-Dsonar.projectKey=mulesoft-demo-develop"
+      - "-Dsonar.sources=."
+  - name: "gcr.io/cloud-builders/docker"
+    args: 
+      - "build"
+      - "-t"
+      - "gcr.io/PROJECT_ID/html-css-website"
+      - "."
+images: 
+  - "gcr.io/PROJECT_ID/html-css-website"
+
+build:
+  stage : build
+  script:
+  - cd humutualfund
+  - mvn -s ../settings.xml clean package
+
+
+  artifacts:
+    paths:
+    - humutualfund/target/
+    when: always
+    expire_in: 2 hour
+    
+deploy:
+  stage: deploy
+  script:
+    - mvn -s settings.xml -f humutualfund/pom.xml mule:deploy -Dmule.artifact=humutualfund/target/helloworld-1.0.0-SNAPSHOT-mule-application.jar  -Danypoint.userName=$MULESOFTUSERNAME -Danypoint.password=$MULESOFTPASSWORD -Dapplication.name=demo-123-mproject -Danypoint.businessGroup=Sandbox -Danypoint.environment=Sandbox -Dch.workers=$CH_WORKER_TYPE -Dch.region=us-east-2 -Dch.workers=$CH_WORKER_NUMBER -Denv=dev -Denv.clientId=$MULESOFTCLIENTID -Denv.clientSecret=$MULESOFTCLIENTSECRET
+  dependencies:
+    - build
+
+
+
+
 
