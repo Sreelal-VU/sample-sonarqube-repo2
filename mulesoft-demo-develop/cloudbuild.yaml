@@ -9,18 +9,14 @@ stages :
   - build
   - deploy
   steps: 
-  - name: "gcr.io/sample-sonarqube-repo2/sonar-scanner:latest"
+  - name: "gcr.io/us-gcp-ame-con-207-npd-1/sonar-scanner:latest"
     args: 
       - "-Dsonar.host.url=http://35.190.148.217:9000"
       - "-Dsonar.login=3378bda3532b045ce559432e5eafcc2fea7a1b36"
       - "-Dsonar.projectKey=mulesoft-demo-develop"
       - "-Dsonar.sources=."
   - name: "gcr.io/cloud-builders/docker"
-    args: 
-      - "build"
-      - "-t"
-      - "gcr.io/PROJECT_ID/"
-      - "."
+
 images: 
   - "gcr.io/PROJECT_ID/html-css-website"
 
