@@ -19,7 +19,7 @@ stages :
     args: 
       - "build"
       - "-t"
-      - "gcr.io/PROJECT_ID/html-css-website"
+      - "gcr.io/PROJECT_ID/"
       - "."
 images: 
   - "gcr.io/PROJECT_ID/html-css-website"
